@@ -2,10 +2,10 @@ package org.graceframework.samples
 
 import geb.spock.GebReportingSpec
 
-import org.grails.samples.pages.WelcomePage
+import org.graceframework.samples.pages.WelcomePage
 
 
-import grails.test.mixin.integration.Integration
+import grails.testing.mixin.integration.Integration
 import spock.lang.*
 
 @Integration

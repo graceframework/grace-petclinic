@@ -1,11 +1,9 @@
 package org.graceframework.samples
 
-import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
 
 
-@TestFor(Pet)
 class PetSpec extends Specification implements DomainDataFactory {
 	
 	Pet pet = validPet()

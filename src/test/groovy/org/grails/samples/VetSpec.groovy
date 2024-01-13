@@ -1,9 +1,7 @@
 package org.graceframework.samples
 
-import grails.test.mixin.TestFor
 import spock.lang.Specification
 
-@TestFor(Vet)
 class VetSpec extends Specification implements DomainDataFactory {
 	
 	Vet vet = validVet()

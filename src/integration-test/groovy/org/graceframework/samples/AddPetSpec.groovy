@@ -1,8 +1,8 @@
 package org.graceframework.samples
 
-import org.grails.samples.pages.AddPetPage
-import org.grails.samples.pages.AddOwnerPage
-import org.grails.samples.pages.ShowOwnerPage
+import org.graceframework.samples.pages.AddPetPage
+import org.graceframework.samples.pages.AddOwnerPage
+import org.graceframework.samples.pages.ShowOwnerPage
 import spock.lang.Shared
 
 class AddPetSpec extends PetclinicSpecs {

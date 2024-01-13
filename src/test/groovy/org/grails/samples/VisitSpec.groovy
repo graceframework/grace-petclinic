@@ -1,10 +1,8 @@
 package org.graceframework.samples
 
-import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll;
 
-@TestFor(Visit)
 class VisitSpec extends Specification implements DomainDataFactory {
 	
 	Visit visit = validVisit()

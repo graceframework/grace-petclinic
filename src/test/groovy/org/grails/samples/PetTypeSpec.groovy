@@ -1,12 +1,8 @@
 package org.graceframework.samples
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@TestFor(PetType)
-@Mock(PetType)
 class PetTypeSpec extends Specification implements DomainDataFactory {
 
 	PetType petType = validPetType()

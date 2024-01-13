@@ -1,9 +1,9 @@
 package org.graceframework.samples
 
-import org.grails.samples.pages.AddOwnerPage
-import org.grails.samples.pages.FindOwnersPage
-import org.grails.samples.pages.OwnerSelectionPage
-import org.grails.samples.pages.ShowOwnerPage
+import org.graceframework.samples.pages.AddOwnerPage
+import org.graceframework.samples.pages.FindOwnersPage
+import org.graceframework.samples.pages.OwnerSelectionPage
+import org.graceframework.samples.pages.ShowOwnerPage
 
 class FindOwnersSpec extends PetclinicSpecs {
 

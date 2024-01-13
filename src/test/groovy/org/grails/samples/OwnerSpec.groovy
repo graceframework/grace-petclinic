@@ -1,10 +1,8 @@
 package org.graceframework.samples
 
-import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@TestFor(Owner)
 class OwnerSpec extends Specification implements DomainDataFactory {
 
 	Owner owner = validOwner()

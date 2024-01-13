@@ -1,6 +1,6 @@
 package org.graceframework.samples
 
-import org.grails.samples.pages.DisplayVetsPage
+import org.graceframework.samples.pages.DisplayVetsPage
 
 class DisplayVetsSpec extends PetclinicSpecs {
 	

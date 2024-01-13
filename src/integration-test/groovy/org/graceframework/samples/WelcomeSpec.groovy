@@ -1,9 +1,9 @@
 package org.graceframework.samples
 
-import org.grails.samples.pages.DisplayVetsPage
-import org.grails.samples.pages.FindOwnersPage
-import org.grails.samples.pages.TutorialPage
-import org.grails.samples.pages.WelcomePage
+import org.graceframework.samples.pages.DisplayVetsPage
+import org.graceframework.samples.pages.FindOwnersPage
+import org.graceframework.samples.pages.TutorialPage
+import org.graceframework.samples.pages.WelcomePage
 
 class WelcomeSpec extends PetclinicSpecs {
 	
