@@ -1,22 +1,27 @@
 buildscript {
     repositories {
-        mavenLocal()
+        // mavenLocal()
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://repo.gradle.org/gradle/libs-releases" }
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+        if (project.projectVersion.endsWith('-SNAPSHOT')) {
+            maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+        }
     }
     dependencies {
-        classpath "org.graceframework:grace-gradle-plugin:$grailsVersion"
+        classpath "org.graceframework:grace-gradle-plugin:$graceVersion"
         classpath "com.github.erdi:webdriver-binaries-gradle-plugin:3.2"
         classpath "org.graceframework.plugins:asset-pipeline-gradle:5.0.0"
     }
 }
 
-// ext['grace-gsp.version'] = '2022.0.1-SNAPSHOT'
-// ext['grace-plugin-scaffolding.version'] = '5.0.1-SNAPSHOT'
-// ext['spring-boot.version'] = '2.7.10'
-// ext['tomcat.version'] = '9.0.80'
+ext['grace-gsp.version'] = '2022.0.1-SNAPSHOT'
+ext['grace-async.version'] = '5.0.1-SNAPSHOT'
+ext['grace-events.version'] = '5.0.1-SNAPSHOT'
+ext['grace-scaffolding.version'] = '5.0.1-SNAPSHOT'
+ext['grace-plugin-scaffolding.version'] = '5.0.1-SNAPSHOT'
+ext['spring-boot.version'] = '2.7.18'
+ext['tomcat.version'] = '9.0.83'
 ext.isSnapshotVersion = projectVersion.endsWith("SNAPSHOT")
 ext.isReleaseVersion = !isSnapshotVersion
 
@@ -32,7 +37,7 @@ apply plugin:"org.graceframework.grace-gsp"
 apply plugin:"org.graceframework.asset-pipeline"
 
 repositories {
-    mavenLocal()
+    // mavenLocal()
     mavenCentral()
     if (isSnapshotVersion) {
         maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
