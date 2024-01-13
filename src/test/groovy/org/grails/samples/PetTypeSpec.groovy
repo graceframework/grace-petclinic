@@ -1,4 +1,4 @@
-package org.grails.samples
+package org.graceframework.samples
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor

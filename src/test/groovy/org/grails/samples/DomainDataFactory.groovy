@@ -1,4 +1,4 @@
-package org.grails.samples
+package org.graceframework.samples
 
 trait DomainDataFactory {
 

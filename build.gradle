@@ -1,79 +1,143 @@
 buildscript {
-    ext {
-        grailsVersion = project.grailsVersion
-    }
     repositories {
         mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://repo.gradle.org/gradle/libs-releases" }
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.1.1'
+        classpath "org.graceframework:grace-gradle-plugin:$grailsVersion"
+        classpath "com.github.erdi:webdriver-binaries-gradle-plugin:3.2"
+        classpath "org.graceframework.plugins:asset-pipeline-gradle:5.0.0"
     }
 }
 
-plugins {
-    id "io.spring.dependency-management" version "0.5.2.RELEASE"
+ext['grace-gsp.version'] = '2022.0.1-SNAPSHOT'
+ext['grace-plugin-scaffolding.version'] = '5.0.1-SNAPSHOT'
+ext['spring-boot.version'] = '2.7.10'
+ext['tomcat.version'] = '9.0.80'
+ext.isSnapshotVersion = projectVersion.endsWith("SNAPSHOT")
+ext.isReleaseVersion = !isSnapshotVersion
+
+version project.projectVersion
+group "org.graceframework.demo"
+
+apply plugin:"eclipse"
+apply plugin:"idea"
+apply plugin:"war"
+apply plugin:"org.graceframework.grace-web"
+apply plugin:"com.github.erdi.webdriver-binaries"
+apply plugin:"org.graceframework.grace-gsp"
+apply plugin:"org.graceframework.asset-pipeline"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    if (isSnapshotVersion) {
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+    }
 }
 
-version "0.1"
-group "petclinic"
-
-apply plugin: "spring-boot"
-apply plugin: "war"
-apply plugin: "asset-pipeline"
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "org.grails.grails-web"
-apply plugin: "org.grails.grails-gsp"
-
-ext {
-    grailsVersion = project.grailsVersion
-    gradleWrapperVersion = project.gradleWrapperVersion
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
 }
+
+dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    compileOnly "io.micronaut:micronaut-inject-groovy"
+    console "org.graceframework:grace-console"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.graceframework:grace-core"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.graceframework:grace-boot"
+    implementation "org.graceframework:grace-logging"
+    implementation "org.graceframework:grace-plugin-controllers"
+    implementation "org.graceframework:grace-plugin-codecs"
+    implementation "org.graceframework:grace-plugin-databinding"
+    implementation "org.graceframework:grace-plugin-datasource"
+    implementation "org.graceframework:grace-plugin-domain-class"
+    implementation "org.graceframework:grace-plugin-i18n"
+    implementation "org.graceframework:grace-plugin-interceptors"
+    implementation "org.graceframework:grace-plugin-rest"
+    implementation "org.graceframework:grace-plugin-services"
+    implementation "org.graceframework:grace-plugin-url-mappings"
+    implementation "org.graceframework.plugins:cache"
+    implementation "org.graceframework.plugins:async"
+    implementation "org.graceframework.plugins:scaffolding"
+    implementation "org.graceframework.plugins:events"
+    implementation "org.graceframework.plugins:hibernate5"
+    implementation "org.hibernate:hibernate-core:5.6.15.Final"
+    implementation "org.graceframework.plugins:gsp"
+    profile "org.graceframework.profiles:web:2022.0.0-SNAPSHOT"
+    runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
+    runtimeOnly "com.h2database:h2"
+    runtimeOnly "org.apache.tomcat:tomcat-jdbc"
+    runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
+    runtimeOnly "org.graceframework.plugins:asset-pipeline-plugin:5.0.0"
+    testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "org.graceframework:grace-test-support"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.graceframework.plugins:geb"
+    testImplementation "org.seleniumhq.selenium:selenium-remote-driver:4.16.1"
+    testImplementation "org.seleniumhq.selenium:selenium-api:4.16.1"
+    testImplementation "org.seleniumhq.selenium:selenium-support:4.16.1"
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:4.16.1"
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:4.16.1"
+}
+
+bootRun {
+    ignoreExitValue true
+    jvmArgs(
+        '-Dspring.output.ansi.enabled=always', 
+        '-noverify', 
+        '-XX:TieredStopAtLevel=1',
+        '-Xmx1024m')
+    sourceResources sourceSets.main
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+}
+
+tasks.withType(GroovyCompile) {
+    configure(groovyOptions) {
+        forkOptions.jvmArgs = ['-Xmx1024m']
+    }
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
+webdriverBinaries {
+    if (!System.getenv().containsKey('GITHUB_ACTIONS')) {
+        chromedriver {
+            version = '2.45.0'
+            fallbackTo32Bit = true
+        }
+        geckodriver '0.30.0'
+    }
+}
+
+tasks.withType(Test) {
+    systemProperty "geb.env", System.getProperty('geb.env')
+    systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
+    if (!System.getenv().containsKey('GITHUB_ACTIONS')) {
+        systemProperty 'webdriver.chrome.driver', System.getProperty('webdriver.chrome.driver')
+        systemProperty 'webdriver.gecko.driver', System.getProperty('webdriver.gecko.driver')
+    } else {
+        systemProperty 'webdriver.chrome.driver', "${System.getenv('CHROMEWEBDRIVER')}/chromedriver"
+        systemProperty 'webdriver.gecko.driver', "${System.getenv('GECKOWEBDRIVER')}/geckodriver"
+    }
+}
+
 
 assets {
     minifyJs = true
     minifyCss = true
-}
-
-repositories {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
-}
-
-dependencies {
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
-    compile "org.grails:grails-dependencies"
-    compile "org.grails:grails-web-boot"
-
-    compile "org.grails.plugins:hibernate"
-    compile "org.grails.plugins:cache"
-    compile "org.hibernate:hibernate-ehcache"
-
-    runtime "org.grails.plugins:asset-pipeline"
-    runtime "org.grails.plugins:scaffolding"
-
-    testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:geb"
-
-    // Note: It is recommended to update to a more robust driver (Chrome, Firefox etc.)
-    testCompile 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.44.0'
-    testCompile 'com.github.detro:phantomjsdriver:1.2.0'
-
-    console "org.grails:grails-console"
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = gradleWrapperVersion
 }
