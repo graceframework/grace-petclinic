@@ -1,13 +1,12 @@
-Petclinic Sample Application
-============================
+# Grace Petclinic Sample Application
 
-This is the standard introductory sample application for Grails. To get started with it, simply clone the repository and then from within your local copy run:
+This is the standard introductory sample application for Grace. To get started with it, simply clone the repository and then from within your local copy run:
 
-    ./gradlew run
+    ./gradlew bootRun
 
 on Unix-like systems, or
 
-    gradlew run
+    gradlew bootRun
 
 on Windows via the command prompt. Once the server has started up, you can copy the URL and paste it in a browser.
 
