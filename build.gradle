@@ -13,10 +13,10 @@ buildscript {
     }
 }
 
-ext['grace-gsp.version'] = '2022.0.1-SNAPSHOT'
-ext['grace-plugin-scaffolding.version'] = '5.0.1-SNAPSHOT'
-ext['spring-boot.version'] = '2.7.10'
-ext['tomcat.version'] = '9.0.80'
+// ext['grace-gsp.version'] = '2022.0.1-SNAPSHOT'
+// ext['grace-plugin-scaffolding.version'] = '5.0.1-SNAPSHOT'
+// ext['spring-boot.version'] = '2.7.10'
+// ext['tomcat.version'] = '9.0.80'
 ext.isSnapshotVersion = projectVersion.endsWith("SNAPSHOT")
 ext.isReleaseVersion = !isSnapshotVersion
 
