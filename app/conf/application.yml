@@ -2,7 +2,7 @@
 grails:
     profile: web
     codegen:
-        defaultPackage: org.rainboyan.demo
+        defaultPackage: org.graceframework.samples
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
