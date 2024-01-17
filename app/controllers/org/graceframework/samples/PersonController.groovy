@@ -3,70 +3,70 @@ package org.graceframework.samples
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
-class PetController {
+class PersonController {
 
-    PetService petService
+    PersonService personService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond petService.list(params), model:[petCount: petService.count()]
+        respond personService.list(params), model:[personCount: personService.count()]
     }
 
     def show(Long id) {
-        respond petService.get(id)
+        respond personService.get(id)
     }
 
     def create() {
-        respond new Pet(params)
+        respond new Person(params)
     }
 
-    def save(Pet pet) {
-        if (pet == null) {
+    def save(Person person) {
+        if (person == null) {
             notFound()
             return
         }
 
         try {
-            petService.save(pet)
+            personService.save(person)
         } catch (ValidationException e) {
-            respond pet.errors, view:'create'
+            respond person.errors, view:'create'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'pet.label', default: 'Pet'), pet.id])
-                redirect pet
+                flash.message = message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), person.id])
+                redirect person
             }
-            '*' { respond pet, [status: CREATED] }
+            '*' { respond person, [status: CREATED] }
         }
     }
 
     def edit(Long id) {
-        respond petService.get(id)
+        respond personService.get(id)
     }
 
-    def update(Pet pet) {
-        if (pet == null) {
+    def update(Person person) {
+        if (person == null) {
             notFound()
             return
         }
 
         try {
-            petService.save(pet)
+            personService.save(person)
         } catch (ValidationException e) {
-            respond pet.errors, view:'edit'
+            respond person.errors, view:'edit'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'pet.label', default: 'Pet'), pet.id])
-                redirect pet
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), person.id])
+                redirect person
             }
-            '*'{ respond pet, [status: OK] }
+            '*'{ respond person, [status: OK] }
         }
     }
 
@@ -76,11 +76,11 @@ class PetController {
             return
         }
 
-        petService.delete(id)
+        personService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'pet.label', default: 'Pet'), id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
@@ -90,7 +90,7 @@ class PetController {
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'pet.label', default: 'Pet'), params.id])
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }
