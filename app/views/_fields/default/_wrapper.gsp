@@ -1,5 +1,5 @@
-<div class="form-group row ${invalid ? 'has-error' : ''}">
-    <label for="${property}" class="col-3 col-form-label property-label text-right">${label} <g:if test="${required}"><span class="required-indicator">*</span></g:if></label>
+<div class="form-group row pb-3 ${invalid ? 'has-error' : ''}">
+    <label for="${property}" class="col-3 col-form-label property-label text-end">${label} <g:if test="${required}"><span class="required-indicator">*</span></g:if></label>
 
     <div class="col-9">
         <f:widget bean="${bean}" property="${property}"/>

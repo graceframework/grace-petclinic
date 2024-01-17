@@ -15,11 +15,6 @@ buildscript {
     }
 }
 
-ext['grace-gsp.version'] = '2022.0.1-SNAPSHOT'
-ext['grace-async.version'] = '5.0.1-SNAPSHOT'
-ext['grace-events.version'] = '5.0.1-SNAPSHOT'
-ext['grace-scaffolding.version'] = '5.0.1-SNAPSHOT'
-ext['grace-plugin-scaffolding.version'] = '5.0.1-SNAPSHOT'
 ext['spring-boot.version'] = '2.7.18'
 ext['tomcat.version'] = '9.0.83'
 ext.isSnapshotVersion = projectVersion.endsWith("SNAPSHOT")
@@ -39,6 +34,7 @@ apply plugin:"org.graceframework.asset-pipeline"
 repositories {
     // mavenLocal()
     mavenCentral()
+    maven { url "https://repo.gradle.org/gradle/libs-releases" }
     if (isSnapshotVersion) {
         maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
     }
@@ -74,8 +70,10 @@ dependencies {
     implementation "org.graceframework:grace-plugin-services"
     implementation "org.graceframework:grace-plugin-url-mappings"
     implementation "org.graceframework.plugins:cache"
+    implementation "org.graceframework.plugins:database-migration"
     implementation "org.graceframework.plugins:async"
     implementation "org.graceframework.plugins:scaffolding"
+    implementation "org.graceframework.plugins:fields"
     implementation "org.graceframework.plugins:events"
     implementation "org.graceframework.plugins:hibernate5"
     implementation "org.hibernate:hibernate-core:5.6.15.Final"
