@@ -12,6 +12,7 @@ buildscript {
         classpath "org.graceframework:grace-gradle-plugin:$graceVersion"
         classpath "com.github.erdi:webdriver-binaries-gradle-plugin:3.2"
         classpath "org.graceframework.plugins:asset-pipeline-gradle:5.0.1"
+        classpath "org.graceframework.plugins:database-migration:5.0.1"
     }
 }
 
