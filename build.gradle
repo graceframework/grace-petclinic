@@ -78,7 +78,7 @@ dependencies {
     implementation "org.graceframework.plugins:hibernate5"
     implementation "org.hibernate:hibernate-core:5.6.15.Final"
     implementation "org.graceframework.plugins:gsp"
-    profile "org.graceframework.profiles:web:2022.0.0-SNAPSHOT"
+    profile "org.graceframework.profiles:web"
     runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
     runtimeOnly "com.h2database:h2"
     runtimeOnly "org.apache.tomcat:tomcat-jdbc"
