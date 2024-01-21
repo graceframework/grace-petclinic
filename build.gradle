@@ -145,3 +145,11 @@ assets {
     minifyJs = true
     minifyCss = true
 }
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'db/migrations'
+        }
+    }
+}
