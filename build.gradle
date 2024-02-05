@@ -11,8 +11,8 @@ buildscript {
     dependencies {
         classpath "org.graceframework:grace-gradle-plugin:$graceVersion"
         classpath "com.github.erdi:webdriver-binaries-gradle-plugin:3.2"
-        classpath "org.graceframework.plugins:asset-pipeline-gradle:5.0.1"
-        classpath "org.graceframework.plugins:database-migration:5.0.1"
+        classpath "org.graceframework.plugins:asset-pipeline-gradle:5.1.0"
+        classpath "org.graceframework.plugins:database-migration:5.1.0"
     }
 }
 
@@ -84,7 +84,7 @@ dependencies {
     runtimeOnly "com.h2database:h2"
     runtimeOnly "org.apache.tomcat:tomcat-jdbc"
     runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
-    runtimeOnly "org.graceframework.plugins:asset-pipeline-plugin:5.0.1"
+    runtimeOnly "org.graceframework.plugins:asset-pipeline-plugin:5.1.0"
     testImplementation "io.micronaut:micronaut-inject-groovy"
     testImplementation "org.graceframework:grace-test-support"
     testImplementation "org.mockito:mockito-core"
