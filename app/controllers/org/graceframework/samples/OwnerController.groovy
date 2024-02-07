@@ -1,67 +1,99 @@
 package org.graceframework.samples
 
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
+
 class OwnerController {
 
-	def petclinicService
+    OwnerService ownerService
 
-	def add() {
-		if (request.method == 'GET') {
-			return [ownerBean: new Owner()]
-		}
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-		def owner = petclinicService.createOwner(params.owner_firstName, params.owner_lastName,
-			params.owner_address, params.owner_city, params.owner_telephone)
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond ownerService.list(params), model:[ownerCount: ownerService.count()]
+    }
 
-		if (owner.hasErrors()) {
-			return [ownerBean: owner]
-		}
+    def show(Long id) {
+        respond ownerService.get(id)
+    }
 
-		redirect action: 'show', id: owner.id
-	}
+    def create() {
+        respond new Owner(params)
+    }
 
-	def show() {
-		def owner = Owner.get(params.id)
-		if (!owner) {
-			response.sendError 404
-			return
-		}
+    def save(Owner owner) {
+        if (owner == null) {
+            notFound()
+            return
+        }
 
-		[ownerBean: owner]
-	}
+        try {
+            ownerService.save(owner)
+        } catch (ValidationException e) {
+            respond owner.errors, view:'create'
+            return
+        }
 
-	def edit() {
-		def owner = Owner.get(params.id)
-		if (request.method == 'GET') {
-			render view: 'add', model: [ownerBean: owner]
-			return
-		}
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'owner.label', default: 'Owner'), owner.id])
+                redirect owner
+            }
+            '*' { respond owner, [status: CREATED] }
+        }
+    }
 
-		petclinicService.updateOwner(Owner.get(params.id), params.owner?.firstName, params.owner?.lastName,
-			params.owner?.address, params.owner?.city, params.owner?.telephone)
+    def edit(Long id) {
+        respond ownerService.get(id)
+    }
 
-		if (owner.hasErrors()) {
-			render view: 'add', model: [ownerBean: owner]
-			return
-		}
+    def update(Owner owner) {
+        if (owner == null) {
+            notFound()
+            return
+        }
 
-		redirect action: 'show', id: owner.id
-	}
+        try {
+            ownerService.save(owner)
+        } catch (ValidationException e) {
+            respond owner.errors, view:'edit'
+            return
+        }
 
-	def find() {
-		if (!request.post) {
-			return
-		}
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'owner.label', default: 'Owner'), owner.id])
+                redirect owner
+            }
+            '*'{ respond owner, [status: OK] }
+        }
+    }
 
-		def owners = Owner.findAllByLastName(params.lastName)
-		if (!owners) {
-			return [message: 'owners.not.found']
-		}
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
 
-		if (owners.size() > 1) {
-			render view: 'selection', model: [owners: owners]
-		}
-		else {
-			redirect action: 'show', id: owners[0].id
-		}
-	}
+        ownerService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'owner.label', default: 'Owner'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'owner.label', default: 'Owner'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
+        }
+    }
 }
